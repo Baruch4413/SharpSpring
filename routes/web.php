@@ -16,3 +16,17 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    $router->get('/test', function() {
+        return \Illuminate\Support\Str::random(32);
+    });
+
+    $router->get('login', 'AuthController@login');
+
+    $router->group(['middleware' => 'auth'], function () use ($router) {
+
+    });
+
+});
