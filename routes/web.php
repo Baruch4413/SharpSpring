@@ -27,6 +27,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->group(['prefix' => 'notes'], function () use ($router) {
         $router->get('index', 'NotesController@index');
         $router->post('store', 'NotesController@store');
+        $router->get('edit', 'NotesController@edit');
         $router->post('update', 'NotesController@update');
         $router->post('destroy', 'NotesController@destroy');
     });

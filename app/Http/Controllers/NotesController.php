@@ -31,6 +31,11 @@ class NotesController extends Controller {
         return response()->json('There has been an error', 400);
     }
 
+    public function edit (Request $request) {
+        $note = Note::find($request->input('id', 0));
+        return response()->json($note);
+    }
+
     public function update (Request $request) {
         $note = Note::find($request->input('id'));
         if ( ! $note ) {
@@ -45,6 +50,8 @@ class NotesController extends Controller {
     }
 
     public function destroy (Request $request) {
+        $note = Note::find($request->input('id', 0));
+        $note->delete();
         return response()->json('Note deleted', 200);
     }
 
