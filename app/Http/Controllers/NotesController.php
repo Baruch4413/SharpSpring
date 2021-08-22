@@ -16,7 +16,11 @@ class NotesController extends Controller {
     }
 
     public function index (Request $request) {
-        return response()->json(Note::orderBy('id', 'desc')->paginate(100));
+        return response()->json(
+            Note::where('user_id', auth()->user()->id)
+                ->orderBy('id', 'desc')
+                ->paginate(100)
+        );
     }
 
     public function store (Request $request) {
@@ -33,11 +37,17 @@ class NotesController extends Controller {
 
     public function edit (Request $request) {
         $note = Note::find($request->input('id', 0));
+        if ( auth()->user()->id != $note->user_id ) {
+            return response()->json('There has been an error', 400);
+        }
         return response()->json($note);
     }
 
     public function update (Request $request) {
         $note = Note::find($request->input('id'));
+        if ( auth()->user()->id != $note->user_id ) {
+            return response()->json('There has been an error', 400);
+        }
         if ( ! $note ) {
             return response()->json('Note not found', 404);
         }
@@ -51,6 +61,9 @@ class NotesController extends Controller {
 
     public function destroy (Request $request) {
         $note = Note::find($request->input('id', 0));
+        if ( auth()->user()->id != $note->user_id ) {
+            return response()->json('There has been an error', 400);
+        }
         $note->delete();
         return response()->json('Note deleted', 200);
     }
