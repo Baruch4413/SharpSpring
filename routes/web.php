@@ -17,16 +17,18 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->post('login', 'AuthController@login');
 
-    $router->get('/test', function() {
-        return \Illuminate\Support\Str::random(32);
-    });
+$router->group(['middleware' => 'auth'], function () use ($router) {
 
-    $router->get('login', 'AuthController@login');
+    $router->get('me', 'AuthController@me');
+    $router->post('logout', 'AuthController@logout');
 
-    $router->group(['middleware' => 'auth'], function () use ($router) {
-
+    $router->group(['prefix' => 'notes'], function () use ($router) {
+        $router->get('index', 'NotesController@index');
+        $router->post('store', 'NotesController@store');
+        $router->post('update', 'NotesController@update');
+        $router->post('destroy', 'NotesController@destroy');
     });
 
 });
